@@ -12,13 +12,22 @@ public class EchoClient {
 
         try {
             Socket echoSocket = new Socket(server, portNumber);
+            
             InputStream input = echoSocket.getInputStream();
-            String reader = input.read(System.in);
+            InputStreamReader stdInput = new InputStreamReader(System.in);
+            OutputStream output = echoSocket.getOutPutStream();
+            OutputStreamReader stdOutput = new OutputStreamReader(System.out);
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            int keyboard;
+            int serve;
+            while (true) {
+                line = stdInput.read();
+                write(line);
+                serve = input.read();
+                System.out.println(serve);
             }
+
+            //echoSocket.shutDownInput();
 
         } catch (ConnectException ce) {
           System.out.println("We were unable to connect to " + server);

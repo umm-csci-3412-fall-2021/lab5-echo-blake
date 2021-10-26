@@ -14,8 +14,10 @@ public class EchoServer {
                Socket client = socket.accept();
                System.out.println("Got a request!");
 
+               InputStream input = client.getInputStream();
                OutputStream output = client.getOutputStream();
-               output.write(System.out);
+               input.read();
+               output.write();
 
                client.close();
            }
