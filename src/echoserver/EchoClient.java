@@ -12,7 +12,13 @@ public class EchoClient {
 
     public static void main(String[] args) throws IOException {
         String server;
-        server = args[0];
+
+        // Use "127.0.0.1", i.e., localhost, if no server is specified.
+        if (args.length == 0) {
+          server = "127.0.0.1";
+        } else {
+          server = args[0];
+        }
 
         try {
             Socket echoSocket = new Socket(server, portNumber);
