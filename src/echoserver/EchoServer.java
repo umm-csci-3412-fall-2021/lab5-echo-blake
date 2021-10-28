@@ -12,7 +12,7 @@ public class EchoServer {
 
    public static void main(String[] args) {
        try {
-           ServeSocket socket = new ServerSocket(portNumber);
+           ServerSocket socket = new ServerSocket(portNumber);
 
            // Runs continuously
            while (true) {
@@ -34,7 +34,7 @@ public class EchoServer {
                     socketOutput.flush();
                }
 
-               client.shutDownOutput();
+               client.shutdownOutput();
                
                client.close();
            }

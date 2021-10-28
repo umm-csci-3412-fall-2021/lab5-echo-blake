@@ -20,7 +20,7 @@ public class EchoClient {
             // Create both standard inputs/outputs as well as socket stream inputs/outputs
             InputStream socketInput = echoSocket.getInputStream();
             InputStream stdInput = System.in;
-            OutputStream socketOutput = echoSocket.getOutPutStream();
+            OutputStream socketOutput = echoSocket.getOutputStream();
             OutputStream stdOutput = System.out;
 
             int data;
@@ -37,7 +37,9 @@ public class EchoClient {
                 stdOutput.flush();
             }
 
-            echoSocket.shutDownOutput();
+            echoSocket.shutdownOutput();
+
+            echoSocket.close();
 
         } catch (ConnectException ce) {
           System.out.println("We were unable to connect to " + server);
