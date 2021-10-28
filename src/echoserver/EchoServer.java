@@ -1,6 +1,10 @@
 package echoserver;
 import java.net.*;
 import java.io.*;
+import java.net.Socket;
+import java.net.ServerSocket;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class EchoServer {
 
@@ -10,15 +14,28 @@ public class EchoServer {
        try {
            ServeSocket socket = new ServerSocket(portNumber);
 
+           // Runs continuously
            while (true) {
+               
+               // Opens the client socket
                Socket client = socket.accept();
                System.out.println("Got a request!");
 
-               InputStream input = client.getInputStream();
-               OutputStream output = client.getOutputStream();
-               input.read();
-               output.write();
+               // Create socket input and output streams
+               InputStream socketInput = client.getInputStream();
+               OutputStream socketOutput = client.getOutputStream();
 
+               int data;
+               // Continuously reads bytes from socket input stream until there are no more 
+               while ((data = socketInput.read()) != -1) {
+                   
+                    // Writes byte back to the client
+                    socketOutput.write(data);
+                    socketOutput.flush();
+               }
+
+               client.shutDownOutput();
+               
                client.close();
            }
            

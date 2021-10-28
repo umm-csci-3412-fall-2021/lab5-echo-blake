@@ -1,6 +1,10 @@
 package echoserver;
 import java.net.*;
 import java.io.*;
+import java.net.Socket;
+import java.rmi.ConnectException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class EchoClient {
 
@@ -13,21 +17,27 @@ public class EchoClient {
         try {
             Socket echoSocket = new Socket(server, portNumber);
             
-            InputStream input = echoSocket.getInputStream();
-            InputStreamReader stdInput = new InputStreamReader(System.in);
-            OutputStream output = echoSocket.getOutPutStream();
-            OutputStreamReader stdOutput = new OutputStreamReader(System.out);
+            // Create both standard inputs/outputs as well as socket stream inputs/outputs
+            InputStream socketInput = echoSocket.getInputStream();
+            InputStream stdInput = System.in;
+            OutputStream socketOutput = echoSocket.getOutPutStream();
+            OutputStream stdOutput = System.out;
 
-            int keyboard;
-            int serve;
-            while (true) {
-                line = stdInput.read();
-                write(line);
-                serve = input.read();
-                System.out.println(serve);
+            int data;
+            // Continuously reads bytes from standard input until that input ends
+            while ((data = stdInput.read()) != -1) {
+                
+                // Sends/Writes bytes from standard input to server through the socket
+                socketOutput.write(data);
+                socketOutput.flush();
+
+                // Reads bytes from server through the socket and prints them out
+                data = socketInput.read();
+                stdOutput.write(data);
+                stdOutput.flush();
             }
 
-            //echoSocket.shutDownInput();
+            echoSocket.shutDownOutput();
 
         } catch (ConnectException ce) {
           System.out.println("We were unable to connect to " + server);
